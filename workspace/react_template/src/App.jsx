@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Layout/Header';
 import Dashboard from './components/Dashboard/Dashboard';
 import Roadmap from './components/Roadmap/Roadmap';
@@ -10,6 +10,11 @@ import TutorialPrompt from './components/Tutorial/TutorialPrompt';
 import * as LocalStorage from './utils/localStorage';
 import { GamificationProvider } from './contexts/GamificationContext';
 import { TutorialProvider, useTutorial } from './contexts/TutorialContext';
+// Default data imports for static hosting compatibility
+import defaultRoadmap from './data/roadmap.json';
+import defaultTimetable from './data/timetable.json';
+import defaultJournal from './data/journal.json';
+import defaultUser from './data/user.json';
 
 // Create context for global state
 export const AppContext = createContext();
@@ -23,27 +28,25 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load data from localStorage on initial render
+  // Load data on initial render using static defaults to support GitHub Pages
   useEffect(() => {
     const loadData = async () => {
       try {
         setIsLoading(true);
-        
-        // Clear any existing roadmap data and start fresh
-        const response = await fetch('/src/data/roadmap.json');
-        const data = await response.json();
-        setRoadmapData(data);
-        await LocalStorage.setItem('roadmapData', JSON.stringify(data));
+
+        // Always initialize roadmap with default on first load
+        const roadmap = defaultRoadmap;
+        setRoadmapData(roadmap);
+        await LocalStorage.setItem('roadmapData', JSON.stringify(roadmap));
 
         // Load timetable data
         const savedTimetable = await LocalStorage.getItem('timetableData');
         if (savedTimetable) {
           setTimetableData(JSON.parse(savedTimetable));
         } else {
-          const response = await fetch('/src/data/timetable.json');
-          const data = await response.json();
-          setTimetableData(data);
-          await LocalStorage.setItem('timetableData', JSON.stringify(data));
+          const timetable = defaultTimetable;
+          setTimetableData(timetable);
+          await LocalStorage.setItem('timetableData', JSON.stringify(timetable));
         }
 
         // Load journal data
@@ -51,10 +54,9 @@ function App() {
         if (savedJournal) {
           setJournalData(JSON.parse(savedJournal));
         } else {
-          const response = await fetch('/src/data/journal.json');
-          const data = await response.json();
-          setJournalData(data);
-          await LocalStorage.setItem('journalData', JSON.stringify(data));
+          const journal = defaultJournal;
+          setJournalData(journal);
+          await LocalStorage.setItem('journalData', JSON.stringify(journal));
         }
 
         // Load user data
@@ -62,13 +64,12 @@ function App() {
         if (savedUser) {
           setUserData(JSON.parse(savedUser));
         } else {
-          const response = await fetch('/src/data/user.json');
-          const data = await response.json();
+          const user = { ...defaultUser };
           // Set current date as join date and last active
-          data.profile.joinDate = new Date().toISOString().split('T')[0];
-          data.profile.lastActive = new Date().toISOString().split('T')[0];
-          setUserData(data);
-          await LocalStorage.setItem('userData', JSON.stringify(data));
+          user.profile.joinDate = new Date().toISOString().split('T')[0];
+          user.profile.lastActive = new Date().toISOString().split('T')[0];
+          setUserData(user);
+          await LocalStorage.setItem('userData', JSON.stringify(user));
         }
       } catch (error) {
         console.error('Error loading data:', error);
@@ -150,7 +151,7 @@ function AppContent({ activeTab, setActiveTab, contextValue }) {
   const { isTutorialOpen, showTutorialPrompt, startTutorial, completeTutorial, skipTutorial } = useTutorial();
 
   return (
-    <Router basename="/tracker">
+    <Router>
       <div className="min-h-screen bg-gray-100">
         <Header activeTab={activeTab} onTabChange={setActiveTab} />
         
