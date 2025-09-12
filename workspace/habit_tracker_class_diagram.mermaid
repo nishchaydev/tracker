@@ -1,0 +1,181 @@
+classDiagram
+    %% Frontend Classes
+    class App {
+        -state: AppState
+        +render() void
+    }
+    
+    class HabitTracker {
+        -habits: Habit[]
+        +addHabit(habit: Habit) void
+        +updateHabit(id: string, habit: Habit) void
+        +deleteHabit(id: string) void
+        +completeHabit(id: string, date: Date) void
+        +getStreak(id: string) number
+        +getCompletionRate(id: string) number
+        +render() void
+    }
+    
+    class HabitList {
+        -habits: Habit[]
+        +render() void
+    }
+    
+    class HabitItem {
+        -habit: Habit
+        -isComplete: boolean
+        +toggleComplete() void
+        +render() void
+    }
+    
+    class HabitForm {
+        -name: string
+        -description: string
+        -frequency: string
+        -target: number
+        +handleSubmit() void
+        +render() void
+    }
+    
+    class JobBoard {
+        -jobs: Job[]
+        -filters: JobFilter
+        +fetchJobs() Promise~Job[]~
+        +filterJobs(filters: JobFilter) Job[]
+        +render() void
+    }
+    
+    class JobList {
+        -jobs: Job[]
+        +render() void
+    }
+    
+    class JobItem {
+        -job: Job
+        +render() void
+    }
+    
+    class ExportService {
+        +exportToExcel(data: any) void
+        +exportToCSV(data: any) void
+    }
+    
+    class LocalStorageService {
+        +getItem(key: string) any
+        +setItem(key: string, value: any) void
+        +removeItem(key: string) void
+        +clear() void
+    }
+    
+    class ProgressChart {
+        -chartData: any
+        -chartOptions: any
+        +updateChart(data: any) void
+        +render() void
+    }
+    
+    %% Backend Classes
+    class Server {
+        +start() void
+        +setupRoutes() void
+    }
+    
+    class JobScraperService {
+        -jobSources: string[]
+        +scrapeJobs() Promise~Job[]~
+        +processScrapeResults(rawJobs: any[]) Job[]
+        +saveJobs(jobs: Job[]) void
+        +removeDuplicates(jobs: Job[]) Job[]
+    }
+    
+    class JobController {
+        +getJobs(req, res) void
+        +getJobById(req, res) void
+    }
+    
+    class CronService {
+        +scheduleJobScraping() void
+        +start() void
+        +stop() void
+    }
+    
+    %% Data Models
+    class Habit {
+        +id: string
+        +name: string
+        +description: string
+        +frequency: string
+        +target: number
+        +createdAt: Date
+        +completionLog: CompletionLog[]
+        +calculateStreak() number
+        +calculateCompletionRate() number
+        +isCompletedForDate(date: Date) boolean
+        +markCompleted(date: Date, count: number) void
+    }
+    
+    class CompletionLog {
+        +date: Date
+        +count: number
+        +isComplete: boolean
+    }
+    
+    class Job {
+        +id: string
+        +title: string
+        +company: string
+        +location: string
+        +description: string
+        +url: string
+        +source: string
+        +postedDate: Date
+        +scrapedDate: Date
+        +keywords: string[]
+    }
+    
+    class JobFilter {
+        +keyword: string
+        +location: string
+        +company: string
+    }
+    
+    class AppState {
+        +habits: Habit[]
+        +jobs: Job[]
+        +currentView: string
+        +filters: JobFilter
+    }
+    
+    %% Relationships
+    App *-- HabitTracker : contains
+    App *-- JobBoard : contains
+    App *-- AppState : manages
+    
+    HabitTracker *-- HabitList : contains
+    HabitTracker *-- HabitForm : contains
+    HabitTracker *-- ProgressChart : contains
+    
+    HabitList *-- HabitItem : contains
+    
+    JobBoard *-- JobList : contains
+    JobList *-- JobItem : contains
+    
+    HabitTracker --> ExportService : uses
+    JobBoard --> ExportService : uses
+    
+    HabitTracker --> LocalStorageService : uses
+    JobBoard --> LocalStorageService : uses
+    
+    Server *-- JobController : contains
+    Server *-- CronService : uses
+    
+    JobController --> JobScraperService : uses
+    CronService --> JobScraperService : schedules
+    
+    HabitTracker --> Habit : manages
+    Habit *-- CompletionLog : contains
+    
+    JobBoard --> Job : displays
+    JobScraperService --> Job : creates
+    
+    JobBoard *-- JobFilter : uses

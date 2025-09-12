@@ -1,0 +1,16 @@
+{
+  "entries": [],
+  "moodOptions": [
+    { "value": "excited", "label": "Excited", "color": "text-yellow-500" },
+    { "value": "happy", "label": "Happy", "color": "text-green-500" },
+    { "value": "focused", "label": "Focused", "color": "text-blue-500" },
+    { "value": "calm", "label": "Calm", "color": "text-purple-500" },
+    { "value": "tired", "label": "Tired", "color": "text-gray-500" },
+    { "value": "frustrated", "label": "Frustrated", "color": "text-red-500" },
+    { "value": "motivated", "label": "Motivated", "color": "text-orange-500" }
+  ],
+  "commonTags": [
+    "motivation", "progress", "learning", "challenges", "success", 
+    "planning", "reflection", "goals", "fitness", "study", "work"
+  ]
+}

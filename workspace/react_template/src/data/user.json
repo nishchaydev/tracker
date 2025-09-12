@@ -1,0 +1,37 @@
+{
+  "profile": {
+    "name": "New User",
+    "level": 1,
+    "totalXP": 0,
+    "currentLevelXP": 0,
+    "xpToNextLevel": 500,
+    "joinDate": "",
+    "lastActive": ""
+  },
+  "stats": {
+    "currentStreak": 0,
+    "longestStreak": 0,
+    "totalTasksCompleted": 0,
+    "totalJournalEntries": 0,
+    "totalStudyHours": 0,
+    "totalGymSessions": 0,
+    "totalShootingSessions": 0
+  },
+  "badges": [],
+  "achievements": {
+    "firstTask": false,
+    "firstJournal": false,
+    "firstStreak": false,
+    "weekStreak": false,
+    "monthStreak": false,
+    "levelUp": false,
+    "roadmapPhaseComplete": false,
+    "perfectWeek": false
+  },
+  "settings": {
+    "notifications": true,
+    "dailyReminders": true,
+    "motivationalMessages": true,
+    "theme": "light"
+  }
+}

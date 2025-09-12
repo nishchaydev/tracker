@@ -1,0 +1,33 @@
+{
+  "linkOnly": [
+    {
+      "id": "LINK:Google:Software Engineer:Careers",
+      "title": "Software Engineer",
+      "company": "Google",
+      "location": "Multiple",
+      "description": "External listing on Google Careers.",
+      "url": "https://careers.google.com/jobs/results/",
+      "postedDate": "",
+      "scrapedDate": "",
+      "source": "Google Careers",
+      "remote": false,
+      "keywords": ["Backend", "Distributed Systems"]
+    },
+    {
+      "id": "LINK:LinkedIn:Frontend Developer:Jobs",
+      "title": "Frontend Developer",
+      "company": "Various",
+      "location": "Remote",
+      "description": "External listing on LinkedIn Jobs search.",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=frontend%20developer",
+      "postedDate": "",
+      "scrapedDate": "",
+      "source": "LinkedIn",
+      "remote": true,
+      "keywords": ["React", "JavaScript"]
+    }
+  ]
+}
+
+
+

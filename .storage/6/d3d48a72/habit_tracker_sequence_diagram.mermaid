@@ -1,0 +1,73 @@
+sequenceDiagram
+    %% Participants
+    participant User
+    participant App
+    participant HabitTracker
+    participant HabitList
+    participant HabitForm
+    participant JobBoard
+    participant LocalStorage
+    participant ExportService
+    participant Server
+    participant JobScraper
+    participant CronService
+    
+    %% Application Initialization
+    User->>App: Open application
+    App->>LocalStorage: Get stored habits
+    LocalStorage-->>App: Return stored habits
+    App->>HabitTracker: Initialize with habits
+    App->>Server: Request jobs
+    Server-->>App: Return jobs
+    App->>JobBoard: Initialize with jobs
+    App-->>User: Render UI
+    
+    %% Adding a New Habit
+    User->>HabitForm: Fill habit details
+    User->>HabitForm: Submit habit
+    HabitForm->>HabitTracker: Add new habit
+    HabitTracker->>LocalStorage: Save updated habits
+    LocalStorage-->>HabitTracker: Confirm save
+    HabitTracker->>HabitList: Update habit list
+    HabitList-->>User: Display updated habits
+    
+    %% Completing a Habit
+    User->>HabitList: Click complete habit
+    HabitList->>HabitTracker: Mark habit completed
+    HabitTracker->>LocalStorage: Update habit completion
+    LocalStorage-->>HabitTracker: Confirm update
+    HabitTracker->>HabitList: Update UI
+    HabitTracker->>HabitTracker: Calculate streak
+    HabitList-->>User: Show updated UI with streak
+    
+    %% Viewing Job Listings
+    User->>App: Navigate to Job Board
+    App->>JobBoard: Display job board
+    JobBoard-->>User: Show job listings
+    
+    %% Filtering Jobs
+    User->>JobBoard: Set job filters
+    JobBoard->>JobBoard: Filter job list
+    JobBoard-->>User: Show filtered jobs
+    
+    %% Exporting Habit Data
+    User->>HabitTracker: Request data export
+    HabitTracker->>LocalStorage: Get all habit data
+    LocalStorage-->>HabitTracker: Return habit data
+    HabitTracker->>ExportService: Export data (Excel/CSV)
+    ExportService-->>User: Download exported file
+    
+    %% Backend Job Scraping Process
+    CronService->>JobScraper: Trigger scheduled scrape
+    JobScraper->>JobScraper: Scrape job portals
+    JobScraper->>JobScraper: Process results
+    JobScraper->>JobScraper: Remove duplicates
+    JobScraper->>Server: Save new jobs
+    Server-->>JobScraper: Confirm save
+    
+    %% Frontend Job Update
+    User->>App: Request job refresh
+    App->>Server: Request latest jobs
+    Server-->>App: Return latest jobs
+    App->>JobBoard: Update job listings
+    JobBoard-->>User: Display updated jobs

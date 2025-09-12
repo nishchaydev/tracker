@@ -1,0 +1,12 @@
+{
+  "name": "tracker-root",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix workspace/server\" \"npm run dev --prefix workspace/react_template\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "gh-pages": "^6.3.0"
+  }
+}

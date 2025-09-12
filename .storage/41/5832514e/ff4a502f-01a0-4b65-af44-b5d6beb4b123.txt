@@ -1,0 +1,96 @@
+$ cd /workspace/react_template
+$ mkdir -p /workspace/react_template/src/components/HabitTracker
+mkdir -p /workspace/react_template/src/components/JobBoard
+mkdir -p /workspace/react_template/src/utils
+
+$ pnpm add xlsx
+
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 4, reused 3, downloaded 0, added 0
+Progress: resolved 127, reused 126, downloaded 0, added 0
+ WARN  1 deprecated subdependencies found: rollup-plugin-terser@7.0.2
+Packages: +9
++++++++++
+Progress: resolved 473, reused 422, downloaded 9, added 8
+Progress: resolved 473, reused 422, downloaded 9, added 9, done
+ WARN  Issues with peer dependencies found
+.
+└─┬ @metagptx/vite-plugin-source-locator 0.0.6
+  └─┬ rollup-plugin-terser 7.0.2
+    └── ✕ unmet peer rollup@^2.0.0: found 4.50.1
+
+dependencies:
++ xlsx 0.18.5
+
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: @metagptx/vite-plugin-source-locator, esbuild.      │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Done in 4.3s using pnpm v10.15.1
+$ pnpm add react-router-dom
+
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 1, reused 1, downloaded 0, added 0
+Progress: resolved 118, reused 117, downloaded 1, added 0
+ WARN  1 deprecated subdependencies found: rollup-plugin-terser@7.0.2
+Packages: +4
+++++
+Progress: resolved 477, reused 431, downloaded 4, added 4, done
+ WARN  Issues with peer dependencies found
+.
+└─┬ @metagptx/vite-plugin-source-locator 0.0.6
+  └─┬ rollup-plugin-terser 7.0.2
+    └── ✕ unmet peer rollup@^2.0.0: found 4.50.1
+
+dependencies:
++ react-router-dom 7.8.2
+
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: @metagptx/vite-plugin-source-locator, esbuild.      │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Done in 4s using pnpm v10.15.1
+$ pnpm run lint
+
+
+> react-template@0.0.0 lint /workspace/react_template
+> eslint ./src --quiet
+
+$ pnpm add chart.js react-chartjs-2 react-confetti
+
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 3, reused 0, downloaded 0, added 0
+Progress: resolved 99, reused 96, downloaded 1, added 0
+ WARN  1 deprecated subdependencies found: rollup-plugin-terser@7.0.2
+Packages: +5
++++++
+Progress: resolved 482, reused 435, downloaded 5, added 0
+Progress: resolved 482, reused 435, downloaded 5, added 5, done
+ WARN  Issues with peer dependencies found
+.
+└─┬ @metagptx/vite-plugin-source-locator 0.0.6
+  └─┬ rollup-plugin-terser 7.0.2
+    └── ✕ unmet peer rollup@^2.0.0: found 4.50.1
+
+dependencies:
++ chart.js 4.5.0
++ react-chartjs-2 5.3.0
++ react-confetti 6.4.0
+
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: @metagptx/vite-plugin-source-locator, esbuild.      │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Done in 4.3s using pnpm v10.15.1

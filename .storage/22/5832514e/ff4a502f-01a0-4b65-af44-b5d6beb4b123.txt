@@ -1,0 +1,5 @@
+$ cd /workspace/react_template
+$ mkdir -p /workspace/react_template/src/components/HabitTracker
+mkdir -p /workspace/react_template/src/components/JobBoard
+mkdir -p /workspace/react_template/src/utils
+
