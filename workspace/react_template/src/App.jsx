@@ -150,7 +150,7 @@ function AppContent({ activeTab, setActiveTab, contextValue }) {
   const { isTutorialOpen, showTutorialPrompt, startTutorial, completeTutorial, skipTutorial } = useTutorial();
 
   return (
-    <Router>
+    <Router basename="/tracker">
       <div className="min-h-screen bg-gray-100">
         <Header activeTab={activeTab} onTabChange={setActiveTab} />
         
