@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, useState } from 'react';
 import * as LocalStorage from '../utils/localStorage';
 
 const GamificationContext = createContext();
@@ -139,6 +139,7 @@ function gamificationReducer(state, action) {
 // Gamification provider component
 export function GamificationProvider({ children }) {
   const [state, dispatch] = useReducer(gamificationReducer, initialState);
+  const [xpEvent, setXpEvent] = useState(null);
 
   // Load gamification data from localStorage on mount
   useEffect(() => {
@@ -178,6 +179,8 @@ export function GamificationProvider({ children }) {
       type: GAMIFICATION_ACTIONS.ADD_XP,
       payload: { amount, source }
     });
+    // Fire ephemeral XP event for UI feedback
+    setXpEvent({ id: Date.now(), amount, source });
   };
 
   const completeTask = (taskData) => {
@@ -185,6 +188,9 @@ export function GamificationProvider({ children }) {
       type: GAMIFICATION_ACTIONS.COMPLETE_TASK,
       payload: taskData
     });
+    if (taskData && typeof taskData.xpReward === 'number') {
+      setXpEvent({ id: Date.now(), amount: taskData.xpReward, source: 'task' });
+    }
   };
 
   const completeTimetableSlot = (slotData) => {
@@ -192,6 +198,8 @@ export function GamificationProvider({ children }) {
       type: GAMIFICATION_ACTIONS.COMPLETE_TIMETABLE_SLOT,
       payload: slotData
     });
+    const amount = (slotData && typeof slotData.xpReward === 'number') ? slotData.xpReward : 10;
+    setXpEvent({ id: Date.now(), amount, source: 'timetable-slot' });
   };
 
   const writeJournal = (journalData) => {
@@ -199,6 +207,8 @@ export function GamificationProvider({ children }) {
       type: GAMIFICATION_ACTIONS.WRITE_JOURNAL,
       payload: journalData
     });
+    const amount = (journalData && typeof journalData.xpReward === 'number') ? journalData.xpReward : 20;
+    setXpEvent({ id: Date.now(), amount, source: 'journal' });
   };
 
   const updateStreak = (streak) => {
@@ -206,6 +216,10 @@ export function GamificationProvider({ children }) {
       type: GAMIFICATION_ACTIONS.UPDATE_STREAK,
       payload: { streak }
     });
+    if (typeof streak === 'number' && streak > 0 && streak % 7 === 0) {
+      // Celebrate weekly streaks
+      setXpEvent({ id: Date.now(), amount: 50, source: 'streak' });
+    }
   };
 
   const earnBadge = (badgeData) => {
@@ -229,7 +243,8 @@ export function GamificationProvider({ children }) {
     writeJournal,
     updateStreak,
     earnBadge,
-    resetDaily
+    resetDaily,
+    xpEvent
   };
 
   return (

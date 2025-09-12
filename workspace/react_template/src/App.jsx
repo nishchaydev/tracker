@@ -10,11 +10,10 @@ import TutorialPrompt from './components/Tutorial/TutorialPrompt';
 import * as LocalStorage from './utils/localStorage';
 import { GamificationProvider } from './contexts/GamificationContext';
 import { TutorialProvider, useTutorial } from './contexts/TutorialContext';
+import XPConfetti from './components/Shared/XPConfetti';
 // Default data imports for static hosting compatibility
-import defaultRoadmap from './data/roadmap.json';
-import defaultTimetable from './data/timetable.json';
-import defaultJournal from './data/journal.json';
-import defaultUser from './data/user.json';
+// Note: Do not load demo data in production UX. Initialize empty structures
+// and let users create content to avoid pre-filled clutter.
 
 // Create context for global state
 export const AppContext = createContext();
@@ -34,19 +33,27 @@ function App() {
       try {
         setIsLoading(true);
 
-        // Always initialize roadmap with default on first load
-        const roadmap = defaultRoadmap;
-        setRoadmapData(roadmap);
-        await LocalStorage.setItem('roadmapData', JSON.stringify(roadmap));
+        // Initialize roadmap empty by default
+        const savedRoadmap = await LocalStorage.getItem('roadmapData');
+        if (savedRoadmap) {
+          setRoadmapData(JSON.parse(savedRoadmap));
+        } else {
+          const emptyRoadmap = { phases: [] };
+          setRoadmapData(emptyRoadmap);
+          await LocalStorage.setItem('roadmapData', JSON.stringify(emptyRoadmap));
+        }
 
         // Load timetable data
         const savedTimetable = await LocalStorage.getItem('timetableData');
         if (savedTimetable) {
           setTimetableData(JSON.parse(savedTimetable));
         } else {
-          const timetable = defaultTimetable;
-          setTimetableData(timetable);
-          await LocalStorage.setItem('timetableData', JSON.stringify(timetable));
+          const emptyTimetable = {
+            dailyActivities: [],
+            weeklyGoals: { studyHours: 0, workouts: 0, breaks: 0, deepWork: 0 }
+          };
+          setTimetableData(emptyTimetable);
+          await LocalStorage.setItem('timetableData', JSON.stringify(emptyTimetable));
         }
 
         // Load journal data
@@ -54,9 +61,9 @@ function App() {
         if (savedJournal) {
           setJournalData(JSON.parse(savedJournal));
         } else {
-          const journal = defaultJournal;
-          setJournalData(journal);
-          await LocalStorage.setItem('journalData', JSON.stringify(journal));
+          const emptyJournal = { entries: [], moodOptions: ['🙂','😐','😔'], commonTags: ['focus','health','learning'] };
+          setJournalData(emptyJournal);
+          await LocalStorage.setItem('journalData', JSON.stringify(emptyJournal));
         }
 
         // Load user data
@@ -64,7 +71,10 @@ function App() {
         if (savedUser) {
           setUserData(JSON.parse(savedUser));
         } else {
-          const user = { ...defaultUser };
+          const user = {
+            profile: { name: 'You', joinDate: '', lastActive: '' },
+            settings: { theme: 'light', notifications: true }
+          };
           // Set current date as join date and last active
           user.profile.joinDate = new Date().toISOString().split('T')[0];
           user.profile.lastActive = new Date().toISOString().split('T')[0];
@@ -141,6 +151,7 @@ function App() {
             setActiveTab={setActiveTab} 
             contextValue={contextValue}
           />
+          <XPConfetti />
         </AppContext.Provider>
       </GamificationProvider>
     </TutorialProvider>
