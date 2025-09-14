@@ -246,6 +246,11 @@ export function GamificationProvider({ children }) {
     setXpEvent(null);
   };
 
+  const clearAllData = () => {
+    dispatch({ type: GAMIFICATION_ACTIONS.RESET });
+    setXpEvent(null);
+  };
+
   const value = {
     ...state,
     addXP,
@@ -256,6 +261,7 @@ export function GamificationProvider({ children }) {
     earnBadge,
     resetDaily,
     clearXpEvent,
+    clearAllData,
     xpEvent
   };
 

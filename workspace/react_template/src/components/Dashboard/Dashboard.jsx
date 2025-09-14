@@ -39,7 +39,7 @@ function Dashboard() {
   const hasAnyProgress = roadmapProgress > 0 || timetableProgress > 0 || currentStreak > 0;
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto dark:bg-gray-900 min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-start mb-8">
         <div className="dashboard-title">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Productivity Dashboard</h1>

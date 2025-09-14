@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Layout/Header';
+import LandingPage from './components/Landing/LandingPage';
 import Dashboard from './components/Dashboard/Dashboard';
 import Roadmap from './components/Roadmap/Roadmap';
 import Timetable from './components/Timetable/Timetable';
@@ -10,6 +11,7 @@ import TutorialPrompt from './components/Tutorial/TutorialPrompt';
 import * as LocalStorage from './utils/localStorage';
 import { GamificationProvider } from './contexts/GamificationContext';
 import { TutorialProvider, useTutorial } from './contexts/TutorialContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import XPConfetti from './components/Shared/XPConfetti';
 // Default data imports for static hosting compatibility
 // Note: Do not load demo data in production UX. Initialize empty structures
@@ -143,18 +145,20 @@ function App() {
   }
 
   return (
-    <TutorialProvider>
-      <GamificationProvider>
-        <AppContext.Provider value={contextValue}>
-          <AppContent 
-            activeTab={activeTab} 
-            setActiveTab={setActiveTab} 
-            contextValue={contextValue}
-          />
-          <XPConfetti />
-        </AppContext.Provider>
-      </GamificationProvider>
-    </TutorialProvider>
+    <ThemeProvider>
+      <TutorialProvider>
+        <GamificationProvider>
+          <AppContext.Provider value={contextValue}>
+            <AppContent 
+              activeTab={activeTab} 
+              setActiveTab={setActiveTab} 
+              contextValue={contextValue}
+            />
+            <XPConfetti />
+          </AppContext.Provider>
+        </GamificationProvider>
+      </TutorialProvider>
+    </ThemeProvider>
   );
 }
 
@@ -168,11 +172,11 @@ function AppContent({ activeTab, setActiveTab, contextValue }) {
         
         <main className="container mx-auto py-6 px-4 mt-16">
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/timetable" element={<Timetable />} />
             <Route path="/journal" element={<Journal />} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </main>
 
