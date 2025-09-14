@@ -27,7 +27,7 @@ function drawConfettiBurst(ctx, width, height) {
       ctx.fillRect(p.x, p.y, p.size, p.size);
     });
 
-    if (elapsed < 1200) {
+    if (elapsed < 2000) {
       requestAnimationFrame(frame);
     }
   }
@@ -69,16 +69,16 @@ export default function XPConfetti() {
     clearTimeout(timeoutRef.current);
     clearTimeout(textTimeoutRef.current);
 
-    // Hide text after 800ms with fade out
+    // Hide text after 1.5 seconds with fade out
     textTimeoutRef.current = setTimeout(() => {
       setTextVisible(false);
-    }, 800);
+    }, 1500);
 
-    // Hide entire component and clear event after 1400ms
+    // Hide entire component and clear event after 3 seconds
     timeoutRef.current = setTimeout(() => {
       setVisible(false);
       clearXpEvent();
-    }, 1400);
+    }, 3000);
 
     return () => {
       clearTimeout(timeoutRef.current);
