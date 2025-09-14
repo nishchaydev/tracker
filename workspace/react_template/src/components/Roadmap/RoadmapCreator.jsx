@@ -70,6 +70,7 @@ function RoadmapCreator({ isOpen, onClose, onSave }) {
   };
 
   const handleSave = () => {
+    console.log('Saving roadmap with phases:', phases);
     onSave({ phases });
     onClose();
   };
@@ -244,6 +245,12 @@ function RoadmapCreator({ isOpen, onClose, onSave }) {
             ))}
           </div>
 
+          {/* Debug Info */}
+          <div className="mt-4 p-3 bg-gray-100 rounded text-sm">
+            <strong>Debug:</strong> Phases count: {phases.length} | 
+            Button disabled: {phases.length === 0 ? 'Yes' : 'No'}
+          </div>
+
           {/* Actions */}
           <div className="flex justify-end space-x-3 mt-8 pt-6 border-t">
             <button
@@ -254,10 +261,15 @@ function RoadmapCreator({ isOpen, onClose, onSave }) {
             </button>
             <button
               onClick={handleSave}
-              className="btn-primary"
+              className={`btn-primary flex items-center space-x-2 ${
+                phases.length === 0 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : 'hover:shadow-lg transition-all duration-200'
+              }`}
               disabled={phases.length === 0}
             >
-              Save Roadmap
+              <span>Save Roadmap</span>
+              {phases.length > 0 && <span className="text-xs">({phases.length} phase{phases.length !== 1 ? 's' : ''})</span>}
             </button>
           </div>
         </div>
