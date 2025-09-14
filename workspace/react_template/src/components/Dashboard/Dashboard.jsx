@@ -52,20 +52,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Hero Section - XP Progress and Level */}
-      <div className="mb-8" data-tutorial="xp-system">
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-2xl p-8 text-white">
-          <div className="text-center">
-            <div className="text-6xl font-bold mb-2">Level {level}</div>
-            <div className="text-2xl mb-4">{totalXP} XP</div>
-            <div className="text-lg opacity-90">
-              {currentStreak > 0 ? `🔥 ${currentStreak} day streak` : 'Start your streak today!'}
-            </div>
-          </div>
-          <XPProgress level={level} totalXP={totalXP} currentStreak={currentStreak} />
-        </div>
-      </div>
-
       {/* New User Onboarding */}
       {isNewUser && (
         <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-8">
@@ -122,6 +108,20 @@ function Dashboard() {
           progress={hasTodayEntry ? 100 : 0}
           isEmpty={totalJournalEntries === 0}
         />
+      </div>
+
+      {/* Hero Section - XP Progress and Level */}
+      <div className="mb-8" data-tutorial="xp-system">
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-2xl p-8 text-white">
+          <div className="text-center">
+            <div className="text-6xl font-bold mb-2">Level {level}</div>
+            <div className="text-2xl mb-4">{totalXP} XP</div>
+            <div className="text-lg opacity-90">
+              {currentStreak > 0 ? `🔥 ${currentStreak} day streak` : 'Start your streak today!'}
+            </div>
+          </div>
+          <XPProgress level={level} totalXP={totalXP} currentStreak={currentStreak} />
+        </div>
       </div>
 
       {/* Badges */}
