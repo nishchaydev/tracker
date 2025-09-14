@@ -52,15 +52,23 @@ function StreakHeatmap({ journalData }) {
     new Date(entry.date).getFullYear() === selectedYear
   ).length || 0;
 
-  const getIntensity = (hasEntry) => {
+  const getIntensity = (hasEntry, isToday) => {
+    if (isToday) return 'bg-blue-500';
     if (hasEntry) return 'bg-green-500';
     return 'bg-gray-100';
   };
 
   const getTooltipText = (day) => {
     if (!day.isCurrentYear) return '';
-    if (day.hasEntry) return `${day.dateStr}: Journal entry`;
+    if (day.isToday) return `Today: ${day.hasEntry ? 'Journal entry ✓' : 'No entry yet'}`;
+    if (day.hasEntry) return `${day.dateStr}: Journal entry ✓`;
     return `${day.dateStr}: No entry`;
+  };
+
+  const getIntensityLevel = (hasEntry, isToday) => {
+    if (isToday) return 5;
+    if (hasEntry) return 4;
+    return 0;
   };
 
   return (
@@ -98,13 +106,11 @@ function StreakHeatmap({ journalData }) {
               {week.map((day, dayIndex) => (
                 <div
                   key={dayIndex}
-                  className={`w-3 h-3 rounded-sm transition-colors ${
-                    day.isToday
-                      ? 'ring-2 ring-blue-500 ring-offset-1'
-                      : day.isCurrentYear
-                      ? getIntensity(day.hasEntry)
+                  className={`w-3 h-3 rounded-sm transition-all duration-200 hover:scale-110 cursor-pointer ${
+                    day.isCurrentYear
+                      ? getIntensity(day.hasEntry, day.isToday)
                       : 'bg-gray-50'
-                  }`}
+                  } ${day.isToday ? 'ring-2 ring-blue-500 ring-offset-1' : ''}`}
                   title={getTooltipText(day)}
                 />
               ))}
@@ -116,11 +122,12 @@ function StreakHeatmap({ journalData }) {
         <div className="flex items-center justify-between text-xs text-gray-500">
           <span>Less</span>
           <div className="flex space-x-1">
-            <div className="w-3 h-3 bg-gray-100 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-200 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-300 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-400 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
+            <div className="w-3 h-3 bg-gray-100 rounded-sm" title="No entry"></div>
+            <div className="w-3 h-3 bg-green-200 rounded-sm" title="1 entry"></div>
+            <div className="w-3 h-3 bg-green-300 rounded-sm" title="2 entries"></div>
+            <div className="w-3 h-3 bg-green-400 rounded-sm" title="3 entries"></div>
+            <div className="w-3 h-3 bg-green-500 rounded-sm" title="4+ entries"></div>
+            <div className="w-3 h-3 bg-blue-500 rounded-sm ring-1 ring-blue-300" title="Today"></div>
           </div>
           <span>More</span>
         </div>

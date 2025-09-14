@@ -235,6 +235,10 @@ export function GamificationProvider({ children }) {
     });
   };
 
+  const clearXpEvent = () => {
+    setXpEvent(null);
+  };
+
   const value = {
     ...state,
     addXP,
@@ -244,6 +248,7 @@ export function GamificationProvider({ children }) {
     updateStreak,
     earnBadge,
     resetDaily,
+    clearXpEvent,
     xpEvent
   };
 

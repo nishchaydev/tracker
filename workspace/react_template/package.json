@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint ./src --quiet",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "git-deploy": "npm run build && cd .. && git add . && git commit -m \"Deploy: Activity tracker updates with enhanced UX\" && git push origin main",
+    "deploy": "npm run build && cd .. && git add . && git commit -m \"Deploy: Update activity tracker app\" && git push origin main",
+    "git": "cd .. && git add . && git commit -m \"Update: Activity tracker improvements\" && git push origin main",
+    "quick-deploy": "npm run build && cd .. && git add . && git commit -m \"Quick deploy\" && git push origin main",
+    "deploy-with-message": "npm run build && cd .. && git add . && git commit -m \"Deploy: $npm_config_message\" && git push origin main"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",

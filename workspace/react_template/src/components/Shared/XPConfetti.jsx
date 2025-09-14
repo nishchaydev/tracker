@@ -35,19 +35,26 @@ function drawConfettiBurst(ctx, width, height) {
 }
 
 export default function XPConfetti() {
-  const { xpEvent } = useGamification();
+  const { xpEvent, clearXpEvent } = useGamification();
   const [visible, setVisible] = useState(false);
+  const [textVisible, setTextVisible] = useState(false);
   const canvasRef = useRef(null);
   const timeoutRef = useRef(null);
+  const textTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!xpEvent) return;
 
     // Major events threshold → centered animation; minor → skip (toast optional later)
     const isMajor = xpEvent.amount >= 20 || ['task', 'streak', 'timetable-slot', 'journal'].includes(xpEvent.source);
-    if (!isMajor) return;
+    if (!isMajor) {
+      clearXpEvent();
+      return;
+    }
 
     setVisible(true);
+    setTextVisible(true);
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
     const dpr = window.devicePixelRatio || 1;
@@ -58,11 +65,26 @@ export default function XPConfetti() {
     ctx.scale(dpr, dpr);
     drawConfettiBurst(ctx, rect.width, rect.height);
 
+    // Clear any existing timeouts
     clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => setVisible(false), 1400);
+    clearTimeout(textTimeoutRef.current);
 
-    return () => clearTimeout(timeoutRef.current);
-  }, [xpEvent]);
+    // Hide text after 800ms with fade out
+    textTimeoutRef.current = setTimeout(() => {
+      setTextVisible(false);
+    }, 800);
+
+    // Hide entire component and clear event after 1400ms
+    timeoutRef.current = setTimeout(() => {
+      setVisible(false);
+      clearXpEvent();
+    }, 1400);
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+      clearTimeout(textTimeoutRef.current);
+    };
+  }, [xpEvent, clearXpEvent]);
 
   if (!visible) return null;
 
@@ -78,7 +100,17 @@ export default function XPConfetti() {
     }}>
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
         <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0 }} />
-        <div className="text-3xl font-extrabold text-blue-600 drop-shadow-sm select-none" style={{ position: 'absolute', left: '50%', top: '45%', transform: 'translate(-50%, -50%)' }}>
+        <div 
+          className={`text-3xl font-extrabold text-blue-600 drop-shadow-sm select-none transition-all duration-500 ${
+            textVisible ? 'opacity-100 scale-100 animate-bounce' : 'opacity-0 scale-75'
+          }`}
+          style={{ 
+            position: 'absolute', 
+            left: '50%', 
+            top: '45%', 
+            transform: 'translate(-50%, -50%)'
+          }}
+        >
           +{xpEvent?.amount || 0} XP
         </div>
       </div>

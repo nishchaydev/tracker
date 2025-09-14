@@ -149,16 +149,43 @@ function Timetable() {
       {/* Weekly Goals */}
       <div className="mt-6 bg-white rounded-lg shadow-md p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Weekly Goals</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        {/* Default Goals */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {Object.entries(timetableData.weeklyGoals).map(([goal, target]) => (
-            <div key={goal} className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{target}</div>
-              <div className="text-sm text-gray-600 capitalize">
+            <div key={goal} className={`text-center p-4 rounded-lg border-2 transition-all ${
+              target > 0 ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'
+            }`}>
+              <div className={`text-2xl font-bold ${target > 0 ? 'text-blue-600' : 'text-gray-400'}`}>
+                {target}
+              </div>
+              <div className={`text-sm capitalize ${target > 0 ? 'text-gray-700' : 'text-gray-500'}`}>
                 {goal.replace(/([A-Z])/g, ' $1').trim()}
               </div>
             </div>
           ))}
         </div>
+
+        {/* Custom Goals */}
+        {timetableData.customGoals && timetableData.customGoals.length > 0 && (
+          <div className="border-t pt-6">
+            <h4 className="text-md font-semibold text-gray-800 mb-4">Custom Goals</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {timetableData.customGoals.map((goal) => (
+                <div key={goal.id} className={`text-center p-4 rounded-lg border-2 transition-all ${
+                  goal.value > 0 ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
+                }`}>
+                  <div className={`text-2xl font-bold ${goal.value > 0 ? 'text-green-600' : 'text-gray-400'}`}>
+                    {goal.value}
+                  </div>
+                  <div className={`text-sm ${goal.value > 0 ? 'text-gray-700' : 'text-gray-500'}`}>
+                    {goal.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Creator Modal */}

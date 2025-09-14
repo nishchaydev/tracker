@@ -34,12 +34,16 @@ function Dashboard() {
     new Date(entry.date) >= oneWeekAgo
   ).length || 0;
 
+  // Check if user is new (no data)
+  const isNewUser = totalRoadmapTasks === 0 && totalTimetableSlots === 0 && totalJournalEntries === 0;
+  const hasAnyProgress = roadmapProgress > 0 || timetableProgress > 0 || currentStreak > 0;
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start mb-8">
         <div className="dashboard-title">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Productivity Dashboard</h1>
-          <p className="text-gray-600">Track your progress and stay motivated on your journey</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Productivity Dashboard</h1>
+          <p className="text-gray-600 text-lg">Track your progress and stay motivated on your journey</p>
         </div>
         
         {/* Motivational quote card */}
@@ -48,40 +52,75 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* XP Progress and Level */}
+      {/* Hero Section - XP Progress and Level */}
       <div className="mb-8" data-tutorial="xp-system">
-        <XPProgress level={level} totalXP={totalXP} currentStreak={currentStreak} />
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-2xl p-8 text-white">
+          <div className="text-center">
+            <div className="text-6xl font-bold mb-2">Level {level}</div>
+            <div className="text-2xl mb-4">{totalXP} XP</div>
+            <div className="text-lg opacity-90">
+              {currentStreak > 0 ? `🔥 ${currentStreak} day streak` : 'Start your streak today!'}
+            </div>
+          </div>
+          <XPProgress level={level} totalXP={totalXP} currentStreak={currentStreak} />
+        </div>
       </div>
+
+      {/* New User Onboarding */}
+      {isNewUser && (
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-8">
+          <div className="flex items-center space-x-4">
+            <div className="text-4xl">🎉</div>
+            <div>
+              <h3 className="text-xl font-bold text-green-800 mb-2">Welcome to your productivity journey!</h3>
+              <p className="text-green-700 mb-4">Get started by adding your first activity, creating a roadmap, or writing a journal entry.</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">✨ Add activities</span>
+                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">🗺️ Create roadmap</span>
+                <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">📝 Start journaling</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Statistics cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard 
           title="Roadmap Progress" 
           value={`${roadmapProgress}%`} 
-          description={`${completedRoadmapTasks}/${totalRoadmapTasks} tasks completed`}
+          description={totalRoadmapTasks > 0 ? `${completedRoadmapTasks}/${totalRoadmapTasks} tasks completed` : "No roadmap yet"}
           icon={<RoadmapIcon />}
-          color="bg-blue-500"
+          color={roadmapProgress > 0 ? "bg-blue-500" : "bg-gray-400"}
+          progress={roadmapProgress}
+          isEmpty={totalRoadmapTasks === 0}
         />
         <StatCard 
           title="Daily Activities" 
           value={`${timetableProgress}%`} 
-          description={`${completedTimetableSlots}/${totalTimetableSlots} completed today`}
+          description={totalTimetableSlots > 0 ? `${completedTimetableSlots}/${totalTimetableSlots} completed today` : "No activities yet"}
           icon={<TimetableIcon />}
-          color="bg-green-500"
+          color={timetableProgress > 0 ? "bg-green-500" : "bg-gray-400"}
+          progress={timetableProgress}
+          isEmpty={totalTimetableSlots === 0}
         />
         <StatCard 
           title="Current Streak" 
           value={currentStreak} 
-          description={`${longestStreak} day record`}
+          description={currentStreak > 0 ? `${longestStreak} day record` : "Start your first streak!"}
           icon={<FireIcon />}
-          color="bg-orange-500"
+          color={currentStreak > 0 ? "bg-orange-500" : "bg-gray-400"}
+          progress={Math.min((currentStreak / Math.max(longestStreak, 1)) * 100, 100)}
+          isEmpty={currentStreak === 0}
         />
         <StatCard 
           title="Journal Entries" 
           value={totalJournalEntries} 
-          description={hasTodayEntry ? "Today's entry ✓" : "No entry today"}
+          description={hasTodayEntry ? "Today's entry ✓" : totalJournalEntries > 0 ? "No entry today" : "Start journaling!"}
           icon={<JournalIcon />}
-          color="bg-purple-500"
+          color={hasTodayEntry ? "bg-green-500" : totalJournalEntries > 0 ? "bg-yellow-500" : "bg-gray-400"}
+          progress={hasTodayEntry ? 100 : 0}
+          isEmpty={totalJournalEntries === 0}
         />
       </div>
 
@@ -124,19 +163,68 @@ function Dashboard() {
 }
 
 // Stat card component
-function StatCard({ title, value, description, icon, color }) {
+function StatCard({ title, value, description, icon, color, progress, isEmpty }) {
+  const getMotivationalMessage = () => {
+    if (isEmpty) {
+      switch (title) {
+        case 'Roadmap Progress': return 'Create your first roadmap!';
+        case 'Daily Activities': return 'Add your first activity!';
+        case 'Current Streak': return 'Complete an activity to start!';
+        case 'Journal Entries': return 'Write your first entry!';
+        default: return 'Get started!';
+      }
+    }
+    if (progress === 100) return '🎉 Perfect!';
+    if (progress >= 75) return '🔥 Almost there!';
+    if (progress >= 50) return '💪 Great progress!';
+    if (progress > 0) return '🚀 Keep going!';
+    return 'Ready to start!';
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+    <div className={`bg-white rounded-xl shadow-lg p-6 border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+      isEmpty ? 'border-gray-200' : progress === 100 ? 'border-green-300' : 'border-gray-100'
+    }`}>
       <div className="flex items-center">
-        <div className={`p-3 rounded-full ${color} text-white shadow-lg`}>
+        <div className={`p-4 rounded-full ${color} text-white shadow-lg ${
+          isEmpty ? 'opacity-60' : ''
+        }`}>
           {icon}
         </div>
         <div className="ml-4 flex-1">
           <h3 className="text-sm font-medium text-gray-500 mb-1">{title}</h3>
-          <div className="flex items-baseline">
-            <p className="text-2xl font-bold text-gray-900">{value}</p>
-            {description && <p className="ml-2 text-xs text-gray-600">{description}</p>}
+          <div className="flex items-baseline mb-2">
+            <p className={`text-3xl font-bold ${isEmpty ? 'text-gray-400' : 'text-gray-900'}`}>
+              {value}
+            </p>
+            {description && (
+              <p className={`ml-2 text-xs ${isEmpty ? 'text-gray-400' : 'text-gray-600'}`}>
+                {description}
+              </p>
+            )}
           </div>
+          
+          {/* Progress bar */}
+          <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+            <div 
+              className={`h-2 rounded-full transition-all duration-500 ${
+                progress === 100 ? 'bg-green-500' : 
+                progress >= 75 ? 'bg-blue-500' : 
+                progress >= 50 ? 'bg-yellow-500' : 
+                progress > 0 ? 'bg-orange-500' : 'bg-gray-300'
+              }`}
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+          
+          {/* Motivational message */}
+          <p className={`text-xs font-medium ${
+            isEmpty ? 'text-gray-400' : 
+            progress === 100 ? 'text-green-600' : 
+            progress >= 50 ? 'text-blue-600' : 'text-orange-600'
+          }`}>
+            {getMotivationalMessage()}
+          </p>
         </div>
       </div>
     </div>

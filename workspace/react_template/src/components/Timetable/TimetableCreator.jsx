@@ -10,6 +10,10 @@ function TimetableCreator({ isOpen, onClose, onSave, timetableData }) {
     deepWork: 0
   });
 
+  const [customGoals, setCustomGoals] = useState([]);
+  const [newGoalName, setNewGoalName] = useState('');
+  const [newGoalValue, setNewGoalValue] = useState(0);
+
   const [activityForm, setActivityForm] = useState({
     title: '',
     description: '',
@@ -30,6 +34,7 @@ function TimetableCreator({ isOpen, onClose, onSave, timetableData }) {
         breaks: 0,
         deepWork: 0
       });
+      setCustomGoals(timetableData.customGoals || []);
     }
   }, [isOpen, timetableData]);
 
@@ -91,10 +96,34 @@ function TimetableCreator({ isOpen, onClose, onSave, timetableData }) {
     }));
   };
 
+  const addCustomGoal = () => {
+    if (newGoalName.trim()) {
+      const newGoal = {
+        id: `goal-${Date.now()}`,
+        name: newGoalName.trim(),
+        value: parseInt(newGoalValue) || 0
+      };
+      setCustomGoals([...customGoals, newGoal]);
+      setNewGoalName('');
+      setNewGoalValue(0);
+    }
+  };
+
+  const removeCustomGoal = (goalId) => {
+    setCustomGoals(customGoals.filter(goal => goal.id !== goalId));
+  };
+
+  const updateCustomGoal = (goalId, field, value) => {
+    setCustomGoals(customGoals.map(goal => 
+      goal.id === goalId ? { ...goal, [field]: value } : goal
+    ));
+  };
+
   const handleSave = () => {
     onSave({ 
       dailyActivities: activities,
-      weeklyGoals 
+      weeklyGoals,
+      customGoals
     });
     onClose();
   };
@@ -122,7 +151,7 @@ function TimetableCreator({ isOpen, onClose, onSave, timetableData }) {
           {/* Weekly Goals */}
           <div className="mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Weekly Goals</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Study Hours</label>
                 <input
@@ -159,6 +188,59 @@ function TimetableCreator({ isOpen, onClose, onSave, timetableData }) {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+            </div>
+
+            {/* Custom Goals */}
+            <div className="border-t pt-6">
+              <h4 className="text-md font-semibold text-gray-800 mb-4">Custom Goals</h4>
+              
+              {/* Add Custom Goal */}
+              <div className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  value={newGoalName}
+                  onChange={(e) => setNewGoalName(e.target.value)}
+                  placeholder="e.g., Reading, Meditation, Coding"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  type="number"
+                  value={newGoalValue}
+                  onChange={(e) => setNewGoalValue(e.target.value)}
+                  placeholder="Target"
+                  className="w-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={addCustomGoal}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  <PlusIcon className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Custom Goals List */}
+              {customGoals.map((goal) => (
+                <div key={goal.id} className="flex items-center gap-2 mb-2 p-3 bg-gray-50 rounded-lg">
+                  <input
+                    type="text"
+                    value={goal.name}
+                    onChange={(e) => updateCustomGoal(goal.id, 'name', e.target.value)}
+                    className="flex-1 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <input
+                    type="number"
+                    value={goal.value}
+                    onChange={(e) => updateCustomGoal(goal.id, 'value', parseInt(e.target.value) || 0)}
+                    className="w-16 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <button
+                    onClick={() => removeCustomGoal(goal.id)}
+                    className="p-1 text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    <DeleteIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
 
