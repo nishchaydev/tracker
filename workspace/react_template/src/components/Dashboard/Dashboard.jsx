@@ -142,23 +142,69 @@ function Dashboard() {
         </div>
       )}
 
-      {/* Progress Analytics - Big Charts */}
-      <div className="mb-8" data-tutorial="dashboard">
-        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-          <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Progress Analytics</h2>
-          <Charts 
-            roadmapData={roadmapData}
-            timetableData={timetableData}
-            journalData={journalData}
-          />
-        </div>
-      </div>
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8" data-tutorial="dashboard">
+        
+        {/* Left Column: Progress & Analytics */}
+        <div className="space-y-6">
+          {/* 📊 Analytics Section */}
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <div className="flex items-center space-x-2 mb-6">
+              <span className="text-2xl">📊</span>
+              <h2 className="text-xl font-bold text-gray-800">Analytics</h2>
+            </div>
+            <Charts 
+              roadmapData={roadmapData}
+              timetableData={timetableData}
+              journalData={journalData}
+            />
+          </div>
 
-      {/* Streak Heatmap - Full Width Bottom */}
-      <div className="mb-8">
-        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-          <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Streak Heatmap</h2>
-          <StreakHeatmap journalData={journalData} />
+          {/* 🗓️ Roadmap Progress Section */}
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <div className="flex items-center space-x-2 mb-6">
+              <span className="text-2xl">🗓️</span>
+              <h2 className="text-xl font-bold text-gray-800">Roadmap Progress</h2>
+            </div>
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">📈</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Track Your Learning Journey</h3>
+              <p className="text-gray-500 text-sm mb-4">Create phases and tasks to visualize your progress</p>
+              <div className="text-3xl font-bold text-blue-600">{roadmapProgress}%</div>
+              <div className="text-sm text-gray-500">{completedRoadmapTasks} of {totalRoadmapTasks} tasks completed</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Journal & Activity */}
+        <div className="space-y-6">
+          {/* ✍️ Journal Section */}
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <div className="flex items-center space-x-2 mb-6">
+              <span className="text-2xl">✍️</span>
+              <h2 className="text-xl font-bold text-gray-800">Journal</h2>
+            </div>
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">📝</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Reflect & Grow</h3>
+              <p className="text-gray-500 text-sm mb-4">Document your thoughts and track your mood</p>
+              <div className="text-3xl font-bold text-green-600">{totalJournalEntries}</div>
+              <div className="text-sm text-gray-500">Total entries</div>
+            </div>
+          </div>
+
+          {/* 🔥 Streaks Section */}
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <div className="flex items-center space-x-2 mb-6">
+              <span className="text-2xl">🔥</span>
+              <h2 className="text-xl font-bold text-gray-800">Streaks</h2>
+            </div>
+            <StreakHeatmap journalData={journalData} />
+          </div>
         </div>
       </div>
     </div>
