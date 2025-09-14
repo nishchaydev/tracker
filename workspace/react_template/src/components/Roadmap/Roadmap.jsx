@@ -53,6 +53,10 @@ function Roadmap() {
   );
   const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
+  // Debug logging
+  console.log('Roadmap data:', roadmapData);
+  console.log('Total tasks:', totalTasks, 'Completed tasks:', completedTasks);
+
   return (
     <div className="max-w-6xl mx-auto" data-tutorial="roadmap">
       <div className="mb-8">

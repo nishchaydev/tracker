@@ -16,7 +16,8 @@ const GAMIFICATION_ACTIONS = {
   UPDATE_STREAK: 'UPDATE_STREAK',
   EARN_BADGE: 'EARN_BADGE',
   LEVEL_UP: 'LEVEL_UP',
-  RESET_DAILY: 'RESET_DAILY'
+  RESET_DAILY: 'RESET_DAILY',
+  LOAD_DATA: 'LOAD_DATA'
 };
 
 // Initial state
@@ -131,6 +132,12 @@ function gamificationReducer(state, action) {
         lastActiveDate: new Date().toDateString()
       };
 
+    case GAMIFICATION_ACTIONS.LOAD_DATA:
+      return {
+        ...state,
+        [action.payload.key]: action.payload.value
+      };
+
     default:
       return state;
   }
@@ -148,17 +155,17 @@ export function GamificationProvider({ children }) {
         const savedData = await LocalStorage.getItem('gamificationData');
         if (savedData) {
           const parsedData = JSON.parse(savedData);
-          // Only load if the data is from today or later
-          if (parsedData.lastActiveDate === new Date().toDateString()) {
-            Object.keys(parsedData).forEach(key => {
-              if (parsedData[key] !== undefined) {
-                dispatch({
-                  type: 'LOAD_DATA',
-                  payload: { key, value: parsedData[key] }
-                });
-              }
-            });
-          }
+          console.log('Loading gamification data:', parsedData);
+          
+          // Load all data except lastActiveDate (we'll update that)
+          Object.keys(parsedData).forEach(key => {
+            if (key !== 'lastActiveDate' && parsedData[key] !== undefined) {
+              dispatch({
+                type: GAMIFICATION_ACTIONS.LOAD_DATA,
+                payload: { key, value: parsedData[key] }
+              });
+            }
+          });
         }
       } catch (error) {
         console.error('Error loading gamification data:', error);
