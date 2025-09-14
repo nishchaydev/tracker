@@ -142,19 +142,22 @@ function Dashboard() {
         </div>
       )}
 
-      {/* Charts and Analytics */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8" data-tutorial="dashboard">
-        <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Progress Analytics</h2>
+      {/* Progress Analytics - Big Charts */}
+      <div className="mb-8" data-tutorial="dashboard">
+        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+          <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Progress Analytics</h2>
           <Charts 
             roadmapData={roadmapData}
             timetableData={timetableData}
             journalData={journalData}
           />
         </div>
-        
-        <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Streak Heatmap</h2>
+      </div>
+
+      {/* Streak Heatmap - Full Width Bottom */}
+      <div className="mb-8">
+        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+          <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Streak Heatmap</h2>
           <StreakHeatmap journalData={journalData} />
         </div>
       </div>

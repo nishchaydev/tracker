@@ -72,14 +72,14 @@ function StreakHeatmap({ journalData }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Year Selector */}
       <div className="flex justify-between items-center">
-        <h3 className="font-medium text-gray-900">Journal Activity</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Journal Activity</h3>
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-          className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
         >
           {[2023, 2024, 2025].map(year => (
             <option key={year} value={year}>{year}</option>
@@ -106,7 +106,7 @@ function StreakHeatmap({ journalData }) {
               {week.map((day, dayIndex) => (
                 <div
                   key={dayIndex}
-                  className={`w-3 h-3 rounded-sm transition-all duration-200 hover:scale-110 cursor-pointer ${
+                  className={`w-4 h-4 rounded-md transition-all duration-200 hover:scale-125 cursor-pointer ${
                     day.isCurrentYear
                       ? getIntensity(day.hasEntry, day.isToday)
                       : 'bg-gray-50'
@@ -119,15 +119,15 @@ function StreakHeatmap({ journalData }) {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-sm text-gray-500">
           <span>Less</span>
-          <div className="flex space-x-1">
-            <div className="w-3 h-3 bg-gray-100 rounded-sm" title="No entry"></div>
-            <div className="w-3 h-3 bg-green-200 rounded-sm" title="1 entry"></div>
-            <div className="w-3 h-3 bg-green-300 rounded-sm" title="2 entries"></div>
-            <div className="w-3 h-3 bg-green-400 rounded-sm" title="3 entries"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-sm" title="4+ entries"></div>
-            <div className="w-3 h-3 bg-blue-500 rounded-sm ring-1 ring-blue-300" title="Today"></div>
+          <div className="flex space-x-2">
+            <div className="w-4 h-4 bg-gray-100 rounded-md" title="No entry"></div>
+            <div className="w-4 h-4 bg-green-200 rounded-md" title="1 entry"></div>
+            <div className="w-4 h-4 bg-green-300 rounded-md" title="2 entries"></div>
+            <div className="w-4 h-4 bg-green-400 rounded-md" title="3 entries"></div>
+            <div className="w-4 h-4 bg-green-500 rounded-md" title="4+ entries"></div>
+            <div className="w-4 h-4 bg-blue-500 rounded-md ring-1 ring-blue-300" title="Today"></div>
           </div>
           <span>More</span>
         </div>

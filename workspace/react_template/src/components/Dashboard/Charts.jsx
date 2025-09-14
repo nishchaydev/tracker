@@ -160,14 +160,25 @@ function Charts({ roadmapData, timetableData, journalData }) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <div className="h-80">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Roadmap Progress Chart */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
+        <div className="text-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-800">Roadmap Phase Progress</h3>
+          <p className="text-sm text-gray-600">Track your learning phases completion</p>
+        </div>
+        <div className="h-96">
           <canvas ref={progressChartRef}></canvas>
         </div>
       </div>
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <div className="h-80">
+      
+      {/* Daily Activity Chart */}
+      <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100">
+        <div className="text-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-800">Daily Activity Completion</h3>
+          <p className="text-sm text-gray-600">Last 7 days activity trends</p>
+        </div>
+        <div className="h-96">
           <canvas ref={activityChartRef}></canvas>
         </div>
       </div>
