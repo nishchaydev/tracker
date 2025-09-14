@@ -12,17 +12,6 @@ function Timetable() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showCreator, setShowCreator] = useState(false);
 
-  if (!timetableData) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading timetable...</p>
-        </div>
-      </div>
-    );
-  }
-
   const handleSlotComplete = (slotId) => {
     const updatedTimetable = { ...timetableData };
     const slot = updatedTimetable.dailyActivities.find(s => s.id === slotId);
@@ -49,20 +38,33 @@ function Timetable() {
     setTimetableData(updatedTimetable);
   };
 
+  // Check if it's a new day and reset if needed
+  useEffect(() => {
+    if (timetableData) {
+      const today = new Date().toDateString();
+      const lastReset = localStorage.getItem('lastTimetableReset');
+      
+      if (lastReset !== today) {
+        handleResetDaily();
+        localStorage.setItem('lastTimetableReset', today);
+      }
+    }
+  }, [timetableData]);
+
+  if (!timetableData) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading timetable...</p>
+        </div>
+      </div>
+    );
+  }
+
   const completedSlots = timetableData.dailyActivities.filter(slot => slot.isCompleted).length;
   const totalSlots = timetableData.dailyActivities.length;
   const completionPercentage = totalSlots > 0 ? Math.round((completedSlots / totalSlots) * 100) : 0;
-
-  // Check if it's a new day and reset if needed
-  useEffect(() => {
-    const today = new Date().toDateString();
-    const lastReset = localStorage.getItem('lastTimetableReset');
-    
-    if (lastReset !== today) {
-      handleResetDaily();
-      localStorage.setItem('lastTimetableReset', today);
-    }
-  }, []);
 
   return (
     <div className="max-w-6xl mx-auto" data-tutorial="timetable">
@@ -167,6 +169,7 @@ function Timetable() {
           setTimetableData(data);
           setShowCreator(false);
         }}
+        timetableData={timetableData}
       />
     </div>
   );

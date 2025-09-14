@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,27 +28,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
           cache-dependency-path: workspace/react_template/package-lock.json
-          
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+
       - name: Install dependencies
         run: |
           cd workspace/react_template
           npm ci
-          
+
       - name: Build
         run: |
           cd workspace/react_template
           npm run build
-          
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

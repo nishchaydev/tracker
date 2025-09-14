@@ -4,6 +4,7 @@ import { useGamification } from '../../contexts/GamificationContext';
 import RoadmapPhase from './RoadmapPhase';
 import RoadmapProgress from './RoadmapProgress';
 import RoadmapCreator from './RoadmapCreator';
+import ActivityRoadmap from './ActivityRoadmap';
 import { PlusIcon } from '../Icons/IconSystem';
 
 function Roadmap() {
@@ -58,6 +59,9 @@ function Roadmap() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Learning Roadmap</h1>
         <p className="text-gray-600">Track your progress through structured learning phases</p>
       </div>
+
+      {/* Activity Roadmap */}
+      <ActivityRoadmap />
 
       {roadmapData.phases.length === 0 ? (
         <div className="bg-white rounded-lg shadow-lg p-12 text-center border border-gray-100">

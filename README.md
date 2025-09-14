@@ -238,4 +238,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Built with ❤️ for productivity enthusiasts who love gamification!**
+**Built with ❤️ for productivity enthusiasts who love gamification!**and ke

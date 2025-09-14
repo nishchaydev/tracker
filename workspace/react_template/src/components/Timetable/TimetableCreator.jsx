@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PlusIcon, AddIcon, CheckIcon, EditIcon, DeleteIcon, StudyIcon, FitnessIcon, SportsIcon, BreakIcon } from '../Icons/IconSystem';
 
-function TimetableCreator({ isOpen, onClose, onSave }) {
+function TimetableCreator({ isOpen, onClose, onSave, timetableData }) {
   const [activities, setActivities] = useState([]);
   const [weeklyGoals, setWeeklyGoals] = useState({
     studyHours: 0,
-    gymSessions: 0,
-    shootingSessions: 0,
-    journalEntries: 0
+    workouts: 0,
+    breaks: 0,
+    deepWork: 0
   });
 
   const [activityForm, setActivityForm] = useState({
@@ -19,6 +19,19 @@ function TimetableCreator({ isOpen, onClose, onSave }) {
     xpReward: 10,
     days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
   });
+
+  // Load existing data when component opens
+  useEffect(() => {
+    if (isOpen && timetableData) {
+      setActivities(timetableData.dailyActivities || []);
+      setWeeklyGoals(timetableData.weeklyGoals || {
+        studyHours: 0,
+        workouts: 0,
+        breaks: 0,
+        deepWork: 0
+      });
+    }
+  }, [isOpen, timetableData]);
 
   const activityTypes = [
     { value: 'study', label: 'Study', icon: StudyIcon, color: 'text-blue-500' },
@@ -49,6 +62,7 @@ function TimetableCreator({ isOpen, onClose, onSave }) {
         xpReward: parseInt(activityForm.xpReward),
         days: activityForm.days,
         status: 'pending',
+        isCompleted: false,
         completedDate: null
       };
       setActivities([...activities, newActivity]);
@@ -119,29 +133,29 @@ function TimetableCreator({ isOpen, onClose, onSave }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Gym Sessions</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Workouts</label>
                 <input
                   type="number"
-                  value={weeklyGoals.gymSessions}
-                  onChange={(e) => setWeeklyGoals({ ...weeklyGoals, gymSessions: parseInt(e.target.value) || 0 })}
+                  value={weeklyGoals.workouts}
+                  onChange={(e) => setWeeklyGoals({ ...weeklyGoals, workouts: parseInt(e.target.value) || 0 })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Shooting Sessions</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Breaks</label>
                 <input
                   type="number"
-                  value={weeklyGoals.shootingSessions}
-                  onChange={(e) => setWeeklyGoals({ ...weeklyGoals, shootingSessions: parseInt(e.target.value) || 0 })}
+                  value={weeklyGoals.breaks}
+                  onChange={(e) => setWeeklyGoals({ ...weeklyGoals, breaks: parseInt(e.target.value) || 0 })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Journal Entries</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Deep Work</label>
                 <input
                   type="number"
-                  value={weeklyGoals.journalEntries}
-                  onChange={(e) => setWeeklyGoals({ ...weeklyGoals, journalEntries: parseInt(e.target.value) || 0 })}
+                  value={weeklyGoals.deepWork}
+                  onChange={(e) => setWeeklyGoals({ ...weeklyGoals, deepWork: parseInt(e.target.value) || 0 })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
